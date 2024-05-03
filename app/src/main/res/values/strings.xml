@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Sync Player</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="detected_bpm">Detected BPM</string>
+    <string name="manual_bpm">Manual BPM</string>
+    <string name="sync_bpm">Synchronize BPM</string>
+</resources>
