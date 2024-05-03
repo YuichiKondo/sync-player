@@ -3,14 +3,13 @@ package com.example.syncplayer;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
-import android.util.Log;
 
 import androidx.core.math.MathUtils;
 
 public class Player {
     private final Context context;
     private MediaPlayer mediaPlayer = null;
-    private PlaybackParams playbackParams;
+    private final PlaybackParams playbackParams;
     public Song currentSong = null;
 
     public Player(Context context) {
