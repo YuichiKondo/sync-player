@@ -14,7 +14,7 @@ public class Player {
 
     public Player(Context context) {
         this.context = context;
-        playbackParams = new PlaybackParams();
+        playbackParams = new PlaybackParams().setSpeed(1);
     }
 
     public void play(Song song) {
