@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private final long detectBPMInterval = 2000;
     private int steps = 0;
     private float detectedBPM = 0;
-    private boolean manualBPM = false;
+    private boolean useManualBPM = false;
     private boolean shouldSyncBPM = false;
     private Player player;
     private SensorManager sensorManager;
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         manualBPMSwitch = findViewById(R.id.switch_manual_bpm);
         manualBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            manualBPM = isChecked;
+            useManualBPM = isChecked;
             if (shouldSyncBPM) {
                 syncBPM();
             }
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void syncBPM() {
         float targetBPM;
-        if (manualBPM) {
+        if (useManualBPM) {
             try {
                 targetBPM = Integer.parseInt(manualBpmEditText.getText().toString());
             } catch (NumberFormatException e) {
