@@ -1,5 +1,6 @@
 package com.example.syncplayer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -27,22 +28,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private float detectedBPM = 0;
     private long prev_time = System.currentTimeMillis();
-    private long timeoutMillis = 2000;
+    private final long timeoutMillis = 2000;
     private boolean useManualBPM = false;
     private boolean shouldSyncBPM = false;
-    private int averageN = 5;
-    private ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
+    private final int averageN = 5;
+    private final ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
     private Player player;
-    private SensorManager sensorManager;
-    private Sensor stepSensor;
     private Handler updateSeekBarHandler;
     private Handler timeoutHandler;
     private TextView detectedBPMTextView;
     private EditText manualBpmEditText;
-    private Switch manualBPMSwitch;
-    private Switch syncBPMSwitch;
     private SeekBar seekBar;
-    private Button playButton;
     private Button pauseOrResumeButton;
 
     @Override
@@ -84,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 updateSeekBarHandler.postDelayed(this, 100);
             }
         });
-        playButton = findViewById(R.id.button_play);
+        Button playButton = findViewById(R.id.button_play);
         pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
         playButton.setOnClickListener(v -> {
             player.play(songVibe);
@@ -106,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        manualBPMSwitch = findViewById(R.id.switch_manual_bpm);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch manualBPMSwitch = findViewById(R.id.switch_manual_bpm);
         manualBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             useManualBPM = isChecked;
             if (shouldSyncBPM) {
@@ -131,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        syncBPMSwitch = findViewById(R.id.switch_sync_bpm);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch syncBPMSwitch = findViewById(R.id.switch_sync_bpm);
         syncBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             shouldSyncBPM = isChecked;
             if (isChecked) {
@@ -153,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
             }
             Log.d("DEBUG", "timeout");
         };
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         sensorManager.registerListener(new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
