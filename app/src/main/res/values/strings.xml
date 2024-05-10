@@ -5,5 +5,6 @@
     <string name="resume">Resume</string>
     <string name="detected_bpm">Detected BPM</string>
     <string name="manual_bpm">Manual BPM</string>
+    <string name="default_manual_bpm">180</string>
     <string name="sync_bpm">Synchronize BPM</string>
 </resources>
