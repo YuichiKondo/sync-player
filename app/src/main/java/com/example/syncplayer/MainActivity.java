@@ -22,17 +22,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
-    private final long detectBPMInterval = 2000;
-    private int steps = 0;
     private float detectedBPM = 0;
+    private long prev_time = System.currentTimeMillis();
+    private long timeoutMillis = 2000;
     private boolean useManualBPM = false;
     private boolean shouldSyncBPM = false;
+    private int averageN = 5;
+    private ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
     private Player player;
     private SensorManager sensorManager;
     private Sensor stepSensor;
     private Handler updateSeekBarHandler;
-    private Handler detectBPMHandler;
+    private Handler timeoutHandler;
     private TextView detectedBPMTextView;
     private EditText manualBpmEditText;
     private Switch manualBPMSwitch;
@@ -137,35 +141,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        ステップ検出
+//        BPM検出
+        detectedBPMTextView = findViewById(R.id.text_view_detected_bpm);
+        timeoutHandler = new Handler();
+        Runnable timeout = () -> {
+            stepDeltas.clear();
+            detectedBPM = 0;
+            detectedBPMTextView.setText("0");
+            if (shouldSyncBPM) {
+                syncBPM();
+            }
+            Log.d("DEBUG", "timeout");
+        };
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         sensorManager.registerListener(new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                steps++;
+                timeoutHandler.removeCallbacks(timeout);
+                long curr_time = System.currentTimeMillis();
+                long delta = curr_time - prev_time;
+                if (delta < timeoutMillis) {
+                    stepDeltas.add(delta);
+                }
+                if (stepDeltas.size() > averageN) {
+                    stepDeltas.remove(0);
+                }
+                stepDeltas.stream().mapToLong(Long::longValue).average().ifPresent(averageDelta -> {
+                    detectedBPM = 60000 / (float) averageDelta;
+                    detectedBPMTextView.setText(String.valueOf(detectedBPM));
+                    if (shouldSyncBPM) {
+                        syncBPM();
+                    }
+                    Log.d("DEBUG", "detectedBPM: " + detectedBPM + ", averageDelta: " + averageDelta + ", stepDeltas: " + stepDeltas);
+                });
+                prev_time = curr_time;
+                timeoutHandler.postDelayed(timeout, timeoutMillis);
             }
 
             @Override
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
             }
         }, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
-
-//        BPM検出
-        detectedBPMTextView = findViewById(R.id.text_view_detected_bpm);
-        detectBPMHandler = new Handler();
-        detectBPMHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                detectedBPM = steps * 60000f / detectBPMInterval;
-                detectedBPMTextView.setText(String.valueOf(detectedBPM));
-                steps = 0;
-                if (shouldSyncBPM) {
-                    syncBPM();
-                }
-                detectBPMHandler.postDelayed(this, detectBPMInterval);
-            }
-        });
     }
 
     @Override
