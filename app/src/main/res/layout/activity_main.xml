@@ -13,20 +13,22 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8.5"
+                android:gravity="center_vertical"
                 android:text="@string/detected_bpm" />
 
             <TextView
                 android:id="@+id/text_view_detected_bpm"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5" />
+                android:layout_weight="1.5"
+                android:gravity="center_vertical" />
 
         </LinearLayout>
 
@@ -82,11 +84,24 @@
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
-        <SeekBar
-            android:id="@+id/seek_bar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:max="0" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_play_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/default_play_time" />
+
+            <SeekBar
+                android:id="@+id/seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:max="0" />
+        </LinearLayout>
 
         <Space
             android:layout_width="match_parent"

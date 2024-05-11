@@ -24,6 +24,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private float detectedBPM = 0;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler updateSeekBarHandler;
     private Handler timeoutHandler;
     private TextView detectedBPMTextView;
+    private TextView playTimeTextView;
     private EditText manualBpmEditText;
     private SeekBar seekBar;
     private Button pauseOrResumeButton;
@@ -54,10 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
         Song songVibe = new Song(R.raw.vibe, "Vibe", "Spicyverse", 143);
         player = new Player(this);
+        playTimeTextView=findViewById(R.id.text_view_play_time);
         seekBar = findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int duration = player.getDuration();
+                playTimeTextView.setText(String.format(Locale.getDefault(), "%s/%s", formatTime(progress), formatTime(duration)));
                 if (fromUser) {
                     player.seekTo(progress);
                     Log.d("DEBUG", "onProgressChanged to: " + progress);
@@ -201,5 +206,12 @@ public class MainActivity extends AppCompatActivity {
         }
         player.syncBPM(targetBPM);
         Log.d("DEBUG", "syncBPM targetBPM: " + targetBPM);
+    }
+
+    private String formatTime(int millis){
+        int seconds = millis / 1000;
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
     }
 }
