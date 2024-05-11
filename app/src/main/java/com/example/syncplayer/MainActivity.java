@@ -18,6 +18,9 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText manualBpmEditText;
     private SeekBar seekBar;
     private ImageButton pauseOrResumeButton;
+    private View mainView;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -162,6 +166,18 @@ public class MainActivity extends AppCompatActivity {
                 if (shouldSyncBPM) {
                     syncBPM();
                 }
+            }
+        });
+//        キーボードの完了ボタンでキーボードを閉じて、フォーカスを外す
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mainView = findViewById(R.id.main);
+        manualBpmEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                mainView.requestFocus();
+                imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return true;
+            } else {
+                return false;
             }
         });
 
