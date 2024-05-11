@@ -7,4 +7,5 @@
     <string name="manual_bpm">Manual BPM</string>
     <string name="default_manual_bpm">180</string>
     <string name="sync_bpm">Synchronize BPM</string>
+    <string name="default_play_time">--:--/--:--</string>
 </resources>
