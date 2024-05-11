@@ -233,19 +233,14 @@ public class MainActivity extends AppCompatActivity {
                 if (stepDeltas.size() > averageN) {
                     stepDeltas.remove(0);
                 }
-                if (!stepDeltas.isEmpty()) {
-                    long sum = 0;
-                    for (long stepDelta : stepDeltas) {
-                        sum += stepDelta;
-                    }
-                    float averageDelta = (float) sum / stepDeltas.size();
-                    detectedBPM = 60000 / averageDelta;
+                stepDeltas.stream().mapToLong(Long::longValue).average().ifPresent(averageDelta -> {
+                    detectedBPM = 60000 / (float)averageDelta;
                     detectedBPMTextView.setText(String.format(Locale.getDefault(), "%.2f", detectedBPM));
                     if (shouldSyncBPM) {
                         syncBPM();
                     }
                     Log.d("DEBUG", "detectedBPM: " + detectedBPM + ", averageDelta: " + averageDelta + ", stepDeltas: " + stepDeltas);
-                }
+                });
                 prev_time = curr_time;
                 timeoutHandler.postDelayed(timeout, timeoutMillis);
             }
