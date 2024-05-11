@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private final int averageN = 5;
     private final ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
     private Player player;
+    private PlayList playList;
     private Handler updateSeekBarHandler;
     private Handler timeoutHandler;
     private TextView detectedBPMTextView;
@@ -78,19 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
 //        音楽再生機能
         player = new Player(this);
-        PlayList playList = new PlayList(this, findViewById(R.id.linear_layout_play_list), song -> {
-            player.play(song);
-            seekBar.setMax(player.getDuration());
-            seekBar.setProgress(0);
-            pauseOrResumeButton.setText(R.string.pause);
-            player.setCompletionListener(mp -> pauseOrResumeButton.setText(R.string.resume));
-            if (shouldSyncBPM) {
-                syncBPM();
-            }
-        });
-        playList.Add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
-        playList.Add(new Song(R.raw.letsplay, "Let's Play", "MADZI", 124));
-        playList.Add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 80));
+        playList = new PlayList(this, findViewById(R.id.linear_layout_play_list), this::play);
+        playList.add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
+        playList.add(new Song(R.raw.letsplay, "Let's Play", "MADZI", 124));
+        playList.add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 80));
         pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
         pauseOrResumeButton.setOnClickListener(v -> {
             if (player.isPlaying()) {
@@ -193,6 +185,22 @@ public class MainActivity extends AppCompatActivity {
         requestVisibleBehind(true);
     }
 
+    private void play(Song song) {
+        player.play(song);
+        seekBar.setMax(player.getDuration());
+        seekBar.setProgress(0);
+        pauseOrResumeButton.setText(R.string.pause);
+        player.setCompletionListener(mp -> {
+            Song nextSong = playList.next();
+            if (nextSong != null) {
+                play(nextSong);
+            }
+        });
+        if (shouldSyncBPM) {
+            syncBPM();
+        }
+    }
+
     private void syncBPM() {
         float targetBPM;
         if (useManualBPM) {
@@ -235,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                     stepDeltas.remove(0);
                 }
                 stepDeltas.stream().mapToLong(Long::longValue).average().ifPresent(averageDelta -> {
-                    detectedBPM = 60000 / (float)averageDelta;
+                    detectedBPM = 60000 / (float) averageDelta;
                     detectedBPMTextView.setText(String.format(Locale.getDefault(), "%.2f", detectedBPM));
                     if (shouldSyncBPM) {
                         syncBPM();
