@@ -28,7 +28,10 @@ public class PlayList {
         int index = songs.size() - 1;
         Button button = new Button(context);
         button.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
-        button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        button.setAllCaps(false);
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, 5);
+        button.setLayoutParams(params);
         button.setOnClickListener(v -> {
             currentSongIndex = index;
             callback.accept(song);
