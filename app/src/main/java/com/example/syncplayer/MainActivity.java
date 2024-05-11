@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d("DEBUG", "Request permission failed");
 //            権限が許可されなかった場合は設定画面を開いて許可を求める
-            new AlertDialog.Builder(this).setMessage("身体活動の権限を許可してください").setNegativeButton("設定へ", (dialog, which) -> {
+            new AlertDialog.Builder(this).setMessage(R.string.request_permission_activity_recognition).setNegativeButton(R.string.to_settings, (dialog, which) -> {
                 Intent settings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
                 startActivity(settings);
                 finish();

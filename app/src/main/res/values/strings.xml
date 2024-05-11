@@ -9,4 +9,6 @@
     <string name="default_manual_bpm">180</string>
     <string name="sync_bpm">Synchronize BPM</string>
     <string name="default_play_time">--:--/--:--</string>
+    <string name="request_permission_activity_recognition">身体活動の権限を許可してください</string>
+    <string name="to_settings">設定へ</string>
 </resources>
