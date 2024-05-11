@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         Runnable timeout = () -> {
             stepDeltas.clear();
             detectedBPM = 0;
-            detectedBPMTextView.setText("0");
+            detectedBPMTextView.setText(R.string.default_detected_bpm);
             if (shouldSyncBPM) {
                 syncBPM();
             }
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 stepDeltas.stream().mapToLong(Long::longValue).average().ifPresent(averageDelta -> {
                     detectedBPM = 60000 / (float) averageDelta;
-                    detectedBPMTextView.setText(String.valueOf(detectedBPM));
+                    detectedBPMTextView.setText(String.format(Locale.getDefault(), "%.2f", detectedBPM));
                     if (shouldSyncBPM) {
                         syncBPM();
                     }
