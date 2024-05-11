@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         Song songVibe = new Song(R.raw.vibe, "Vibe", "Spicyverse", 143);
         player = new Player(this);
-        playTimeTextView=findViewById(R.id.text_view_play_time);
+        playTimeTextView = findViewById(R.id.text_view_play_time);
         seekBar = findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("DEBUG", "syncBPM targetBPM: " + targetBPM);
     }
 
-    private String formatTime(int millis){
+    private String formatTime(int millis) {
         int seconds = millis / 1000;
         int minutes = seconds / 60;
         seconds = seconds % 60;
