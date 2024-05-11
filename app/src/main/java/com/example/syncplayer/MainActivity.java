@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private final int averageN = 5;
     private final ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
     private Player player;
-    private PlayList playList;
     private Handler updateSeekBarHandler;
     private Handler timeoutHandler;
     private TextView detectedBPMTextView;
@@ -80,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 //        音楽再生機能
+        Song songVibe = new Song(R.raw.vibe, "Vibe", "Spicyverse", 143);
         player = new Player(this);
         playList = new PlayList(this, findViewById(R.id.linear_layout_play_list), this::play);
         playList.add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
@@ -124,6 +124,27 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 seekBar.setProgress(player.getCurrentPosition());
                 updateSeekBarHandler.postDelayed(this, 100);
+            }
+        });
+        Button playButton = findViewById(R.id.button_play);
+        pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
+        playButton.setOnClickListener(v -> {
+            player.play(songVibe);
+            seekBar.setMax(player.getDuration());
+            seekBar.setProgress(0);
+            pauseOrResumeButton.setText(R.string.pause);
+            player.setCompletionListener(mp -> pauseOrResumeButton.setText(R.string.resume));
+            if (shouldSyncBPM) {
+                syncBPM();
+            }
+        });
+        pauseOrResumeButton.setOnClickListener(v -> {
+            if (player.isPlaying()) {
+                player.pause();
+                pauseOrResumeButton.setText(R.string.resume);
+            } else {
+                player.resume();
+                pauseOrResumeButton.setText(R.string.pause);
             }
         });
 
@@ -248,14 +269,19 @@ public class MainActivity extends AppCompatActivity {
                 if (stepDeltas.size() > averageN) {
                     stepDeltas.remove(0);
                 }
-                stepDeltas.stream().mapToLong(Long::longValue).average().ifPresent(averageDelta -> {
-                    detectedBPM = 60000 / (float) averageDelta;
+                if (!stepDeltas.isEmpty()) {
+                    long sum = 0;
+                    for (long stepDelta : stepDeltas) {
+                        sum += stepDelta;
+                    }
+                    float averageDelta = (float) sum / stepDeltas.size();
+                    detectedBPM = 60000 / averageDelta;
                     detectedBPMTextView.setText(String.format(Locale.getDefault(), "%.2f", detectedBPM));
                     if (shouldSyncBPM) {
                         syncBPM();
                     }
                     Log.d("DEBUG", "detectedBPM: " + detectedBPM + ", averageDelta: " + averageDelta + ", stepDeltas: " + stepDeltas);
-                });
+                }
                 prev_time = curr_time;
                 timeoutHandler.postDelayed(timeout, timeoutMillis);
             }
