@@ -29,6 +29,7 @@ public class PlayList {
         Button button = new Button(context);
         button.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
         button.setAllCaps(false);
+        button.setTextSize(16);
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, 5);
         button.setLayoutParams(params);

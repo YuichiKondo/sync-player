@@ -23,7 +23,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/detected_bpm" />
+                android:text="@string/detected_bpm"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/text_view_detected_bpm"
@@ -31,7 +32,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/default_detected_bpm" />
+                android:text="@string/default_detected_bpm"
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -46,18 +48,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/manual_bpm" />
-
+                android:text="@string/manual_bpm"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/edit_text_number_manual_bpm"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:autofillHints=""
-                android:ems="10"
+                android:ems="4"
                 android:gravity="center_horizontal"
                 android:inputType="numberDecimal"
                 android:text="@string/default_manual_bpm"
+                android:textSize="20sp"
                 tools:ignore="LabelFor" />
 
             <androidx.appcompat.widget.SwitchCompat
@@ -80,7 +83,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/sync_bpm" />
+                android:text="@string/sync_bpm"
+                android:textSize="20sp" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_sync_bpm"
@@ -123,7 +127,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/text_view_original_bpm"
@@ -131,14 +136,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/text_view_play_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/seek_bar"
