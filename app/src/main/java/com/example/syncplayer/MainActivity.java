@@ -41,7 +41,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private float detectedBPM = 0;
-    private long prev_time = System.currentTimeMillis();
+    private long prev_time;
     private final long timeoutMillis = 2000;
     private boolean useManualBPM = false;
     private boolean shouldSyncBPM = false;
@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d("DEBUG", "ACTIVITY_RECOGNITION not granted");
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, 1);
         }
+
+//        初期値設定
+        prev_time = System.currentTimeMillis();
 
 //        ボタン画像
         pauseImage = AppCompatResources.getDrawable(this, R.drawable.pause);
