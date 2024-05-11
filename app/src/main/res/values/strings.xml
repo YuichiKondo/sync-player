@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Sync Player</string>
-    <string name="play">Play</string>
-    <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="detected_bpm">Detected BPM</string>
     <string name="default_detected_bpm">0.00</string>
@@ -11,4 +9,5 @@
     <string name="default_play_time">--:--/--:--</string>
     <string name="request_permission_activity_recognition">身体活動の権限を許可してください</string>
     <string name="to_settings">設定へ</string>
+    <string name="pause_or_resume">Pause or Resume</string>
 </resources>

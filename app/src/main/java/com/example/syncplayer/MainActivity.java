@@ -18,8 +18,8 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -28,6 +28,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView playTimeTextView;
     private EditText manualBpmEditText;
     private SeekBar seekBar;
-    private Button pauseOrResumeButton;
+    private ImageButton pauseOrResumeButton;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -89,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
         pauseOrResumeButton.setOnClickListener(v -> {
             if (player.isPlaying()) {
                 player.pause();
-                pauseOrResumeButton.setText(R.string.resume);
+                pauseOrResumeButton.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.resume));
                 Log.d("DEBUG", "pause");
             } else {
                 player.resume();
-                pauseOrResumeButton.setText(R.string.pause);
+                pauseOrResumeButton.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.pause));
                 Log.d("DEBUG", "resume");
             }
         });
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setProgress(0);
         songInfoTextView.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
         originalBPMTextView.setText(String.format(Locale.getDefault(), "Original BPM %.2f", song.BPM));
-        pauseOrResumeButton.setText(R.string.pause);
+        pauseOrResumeButton.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.pause));
         player.setCompletionListener(mp -> {
             Song nextSong = playList.next();
             if (nextSong != null) {
