@@ -77,8 +77,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
 //        音楽再生機能
-        Song songVibe = new Song(R.raw.vibe, "Vibe", "Spicyverse", 143);
         player = new Player(this);
+        PlayList playList = new PlayList(this, findViewById(R.id.linear_layout_play_list), song -> {
+            player.play(song);
+            seekBar.setMax(player.getDuration());
+            seekBar.setProgress(0);
+            pauseOrResumeButton.setText(R.string.pause);
+            player.setCompletionListener(mp -> pauseOrResumeButton.setText(R.string.resume));
+            if (shouldSyncBPM) {
+                syncBPM();
+            }
+        });
+        playList.Add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
+        playList.Add(new Song(R.raw.letsplay, "Let's Play", "MADZI", 124));
+        playList.Add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 80));
+        pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
+        pauseOrResumeButton.setOnClickListener(v -> {
+            if (player.isPlaying()) {
+                player.pause();
+                pauseOrResumeButton.setText(R.string.resume);
+            } else {
+                player.resume();
+                pauseOrResumeButton.setText(R.string.pause);
+            }
+        });
         playTimeTextView = findViewById(R.id.text_view_play_time);
         seekBar = findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -106,27 +128,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 seekBar.setProgress(player.getCurrentPosition());
                 updateSeekBarHandler.postDelayed(this, 100);
-            }
-        });
-        Button playButton = findViewById(R.id.button_play);
-        pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
-        playButton.setOnClickListener(v -> {
-            player.play(songVibe);
-            seekBar.setMax(player.getDuration());
-            seekBar.setProgress(0);
-            pauseOrResumeButton.setText(R.string.pause);
-            player.setCompletionListener(mp -> pauseOrResumeButton.setText(R.string.resume));
-            if (shouldSyncBPM) {
-                syncBPM();
-            }
-        });
-        pauseOrResumeButton.setOnClickListener(v -> {
-            if (player.isPlaying()) {
-                player.pause();
-                pauseOrResumeButton.setText(R.string.resume);
-            } else {
-                player.resume();
-                pauseOrResumeButton.setText(R.string.pause);
             }
         });
 
