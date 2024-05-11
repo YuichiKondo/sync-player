@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean shouldSyncBPM = false;
     private final int averageN = 5;
     private final ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
+    private Drawable pauseImage;
+    private Drawable resumeImage;
     private Player player;
     private PlayList playList;
     private Handler updateSeekBarHandler;
@@ -79,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, 1);
         }
 
+//        ボタン画像
+        pauseImage = AppCompatResources.getDrawable(this, R.drawable.pause);
+        resumeImage = AppCompatResources.getDrawable(this, R.drawable.resume);
+
 //        音楽再生機能
         player = new Player(this);
         playList = new PlayList(this, findViewById(R.id.linear_layout_play_list), this::play);
@@ -89,11 +96,11 @@ public class MainActivity extends AppCompatActivity {
         pauseOrResumeButton.setOnClickListener(v -> {
             if (player.isPlaying()) {
                 player.pause();
-                pauseOrResumeButton.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.resume));
+                pauseOrResumeButton.setImageDrawable(resumeImage);
                 Log.d("DEBUG", "pause");
             } else {
                 player.resume();
-                pauseOrResumeButton.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.pause));
+                pauseOrResumeButton.setImageDrawable(pauseImage);
                 Log.d("DEBUG", "resume");
             }
         });
@@ -198,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setProgress(0);
         songInfoTextView.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
         originalBPMTextView.setText(String.format(Locale.getDefault(), "Original BPM %.2f", song.BPM));
-        pauseOrResumeButton.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.pause));
+        pauseOrResumeButton.setImageDrawable(pauseImage);
         player.setCompletionListener(mp -> {
             Song nextSong = playList.next();
             if (nextSong != null) {
