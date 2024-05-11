@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, 1);
         }
 
+//        音楽再生機能
         Song songVibe = new Song(R.raw.vibe, "Vibe", "Spicyverse", 143);
         player = new Player(this);
         playTimeTextView = findViewById(R.id.text_view_play_time);
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        BPM手動設定機能
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch manualBPMSwitch = findViewById(R.id.switch_manual_bpm);
         manualBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             useManualBPM = isChecked;
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        BPM同期スイッチ
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch syncBPMSwitch = findViewById(R.id.switch_sync_bpm);
         syncBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             shouldSyncBPM = isChecked;
