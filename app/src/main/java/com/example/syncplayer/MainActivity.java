@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private Handler updateSeekBarHandler;
     private Handler timeoutHandler;
     private TextView detectedBPMTextView;
+    private TextView songInfoTextView;
+    private TextView originalBPMTextView;
     private TextView playTimeTextView;
     private EditText manualBpmEditText;
     private SeekBar seekBar;
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
                 pauseOrResumeButton.setText(R.string.pause);
             }
         });
+        songInfoTextView = findViewById(R.id.text_view_song_info);
+        originalBPMTextView = findViewById(R.id.text_view_original_bpm);
         playTimeTextView = findViewById(R.id.text_view_play_time);
         seekBar = findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -102,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 playTimeTextView.setText(String.format(Locale.getDefault(), "%s/%s", formatTime(progress), formatTime(duration)));
                 if (fromUser) {
                     player.seekTo(progress);
-                    Log.d("DEBUG", "onProgressChanged to: " + progress);
+                    Log.d("DEBUG", "onProgressChanged fromUser to: " + progress);
                 }
             }
 
@@ -189,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
         player.play(song);
         seekBar.setMax(player.getDuration());
         seekBar.setProgress(0);
+        songInfoTextView.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
+        originalBPMTextView.setText(String.format(Locale.getDefault(), "Original BPM %.2f", song.BPM));
         pauseOrResumeButton.setText(R.string.pause);
         player.setCompletionListener(mp -> {
             Song nextSong = playList.next();
