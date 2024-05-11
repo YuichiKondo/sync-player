@@ -90,9 +90,11 @@ public class MainActivity extends AppCompatActivity {
             if (player.isPlaying()) {
                 player.pause();
                 pauseOrResumeButton.setText(R.string.resume);
+                Log.d("DEBUG", "pause");
             } else {
                 player.resume();
                 pauseOrResumeButton.setText(R.string.pause);
+                Log.d("DEBUG", "resume");
             }
         });
         songInfoTextView = findViewById(R.id.text_view_song_info);
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 player.setSpeed(1);
             }
+            Log.d("DEBUG", "shouldSyncBPM: " + shouldSyncBPM);
         });
     }
 
@@ -205,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         if (shouldSyncBPM) {
             syncBPM();
         }
+        Log.d("DEBUG", "play song: " + song.title);
     }
 
     private void syncBPM() {
