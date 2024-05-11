@@ -48,14 +48,13 @@
                 android:gravity="center_vertical"
                 android:text="@string/manual_bpm" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_manual_bpm"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:contentDescription="@string/manual_bpm"
                 android:checked="false"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                android:contentDescription="@string/manual_bpm" />
 
             <EditText
                 android:id="@+id/edit_text_number_manual_bpm"
@@ -84,14 +83,13 @@
                 android:gravity="center_vertical"
                 android:text="@string/sync_bpm" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_sync_bpm"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:contentDescription="@string/sync_bpm"
                 android:checked="false"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                android:contentDescription="@string/sync_bpm" />
 
         </LinearLayout>
 

@@ -1,7 +1,6 @@
 package com.example.syncplayer;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -29,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        BPM手動設定機能
-        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch manualBPMSwitch = findViewById(R.id.switch_manual_bpm);
+        SwitchCompat manualBPMSwitch = findViewById(R.id.switch_manual_bpm);
         manualBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             useManualBPM = isChecked;
             if (shouldSyncBPM) {
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        BPM同期スイッチ
-        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch syncBPMSwitch = findViewById(R.id.switch_sync_bpm);
+        SwitchCompat syncBPMSwitch = findViewById(R.id.switch_sync_bpm);
         syncBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             shouldSyncBPM = isChecked;
             if (isChecked) {
