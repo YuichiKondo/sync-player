@@ -212,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 //        擬似バックグラウンド実行
+//        noinspection deprecation
         requestVisibleBehind(true);
     }
 
