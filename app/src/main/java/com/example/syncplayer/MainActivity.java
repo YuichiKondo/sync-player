@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         float targetBPM;
         if (useManualBPM) {
             try {
-                targetBPM = Integer.parseInt(manualBpmEditText.getText().toString());
+                targetBPM = Float.parseFloat(manualBpmEditText.getText().toString());
             } catch (NumberFormatException e) {
                 targetBPM = detectedBPM;
             }
