@@ -84,15 +84,15 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/sync_bpm"
+                android:text="@string/sync"
                 android:textSize="20sp" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_sync_bpm"
+                android:id="@+id/switch_sync"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:checked="false"
-                android:contentDescription="@string/sync_bpm" />
+                android:contentDescription="@string/sync" />
 
         </LinearLayout>
 

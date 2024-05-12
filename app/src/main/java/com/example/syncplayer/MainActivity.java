@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         manualBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             useManualBPM = isChecked;
             if (shouldSyncBPM) {
-                syncBPM();
+                sync();
             }
         });
         manualBpmEditText = findViewById(R.id.edit_text_number_manual_bpm);
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (shouldSyncBPM) {
-                    syncBPM();
+                    sync();
                 }
             }
         });
@@ -179,11 +179,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        BPM同期スイッチ
-        SwitchCompat syncBPMSwitch = findViewById(R.id.switch_sync_bpm);
-        syncBPMSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        SwitchCompat syncSwitch = findViewById(R.id.switch_sync);
+        syncSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             shouldSyncBPM = isChecked;
             if (isChecked) {
-                syncBPM();
+                sync();
             } else {
                 player.setSpeed(1);
             }
@@ -230,12 +230,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if (shouldSyncBPM) {
-            syncBPM();
+            sync();
         }
         Log.d("DEBUG", "play song: " + song.title);
     }
 
-    private void syncBPM() {
+    private void sync() {
         float targetBPM;
         if (useManualBPM) {
             try {
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
             detectedBPM = 0;
             detectedBPMTextView.setText(R.string.default_detected_bpm);
             if (shouldSyncBPM) {
-                syncBPM();
+                sync();
             }
             Log.d("DEBUG", "timeout");
         };
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     detectedBPM = 60000 / (float) averageDelta;
                     detectedBPMTextView.setText(String.format(Locale.getDefault(), "%.2f", detectedBPM));
                     if (shouldSyncBPM) {
-                        syncBPM();
+                        sync();
                     }
                     Log.d("DEBUG", "detectedBPM: " + detectedBPM + ", averageDelta: " + averageDelta + ", stepDeltas: " + stepDeltas);
                 });
