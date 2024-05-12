@@ -46,8 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private final long timeoutMillis = 2000;
     private boolean useManualBPM = false;
     private boolean shouldSyncBPM = false;
+    private boolean shuffle = false;
+    private boolean repeat = false;
     private final int averageN = 5;
     private final ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
+    private Drawable shuffleOnImage;
+    private Drawable shuffleOffImage;
+    private Drawable repeatOnImage;
+    private Drawable repeatOffImage;
     private Drawable pauseImage;
     private Drawable resumeImage;
     private Player player;
@@ -60,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView playTimeTextView;
     private EditText manualBpmEditText;
     private SeekBar seekBar;
+    private ImageButton shuffleButton;
+    private ImageButton repeatButton;
+    private ImageButton previousButton;
+    private ImageButton nextButton;
     private ImageButton pauseOrResumeButton;
     private View mainView;
 
@@ -87,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
         prev_time = System.currentTimeMillis();
 
 //        ボタン画像
+        shuffleOnImage = AppCompatResources.getDrawable(this, R.drawable.shuffle_on);
+        shuffleOffImage = AppCompatResources.getDrawable(this, R.drawable.shuffle_off);
+        repeatOnImage = AppCompatResources.getDrawable(this, R.drawable.repeat_on);
+        repeatOffImage = AppCompatResources.getDrawable(this, R.drawable.repeat_off);
         pauseImage = AppCompatResources.getDrawable(this, R.drawable.pause);
         resumeImage = AppCompatResources.getDrawable(this, R.drawable.resume);
 
@@ -96,6 +110,30 @@ public class MainActivity extends AppCompatActivity {
         playList.add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
         playList.add(new Song(R.raw.letsplay, "Let's Play", "MADZI", 124));
         playList.add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 80));
+        shuffleButton = findViewById(R.id.button_shuffle);
+        shuffleButton.setOnClickListener(v -> {
+            if (shuffle) {
+                playList.resetOrder();
+                shuffle = false;
+                shuffleButton.setImageDrawable(shuffleOffImage);
+            } else {
+                playList.shuffleOrder();
+                shuffle = true;
+                shuffleButton.setImageDrawable(shuffleOnImage);
+            }
+        });
+        repeatButton = findViewById(R.id.button_repeat);
+        repeatButton.setOnClickListener(v -> {
+            if (repeat) {
+                playList.setRepeat(false);
+                repeat = false;
+                repeatButton.setImageDrawable(repeatOffImage);
+            } else {
+                playList.setRepeat(true);
+                repeat = true;
+                repeatButton.setImageDrawable(repeatOnImage);
+            }
+        });
         pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
         pauseOrResumeButton.setOnClickListener(v -> {
             if (player.isPlaying()) {
@@ -225,7 +263,13 @@ public class MainActivity extends AppCompatActivity {
         pauseOrResumeButton.setImageDrawable(pauseImage);
         player.setCompletionListener(mp -> {
             Song nextSong = playList.next();
-            if (nextSong != null) {
+            if (nextSong == null) {
+                player.release();
+                songInfoTextView.setText("");
+                originalBPMTextView.setText("");
+                playTimeTextView.setText("");
+                seekBar.setMax(0);
+            }else{
                 play(nextSong);
             }
         });
