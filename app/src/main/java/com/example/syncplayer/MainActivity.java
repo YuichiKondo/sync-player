@@ -116,10 +116,12 @@ public class MainActivity extends AppCompatActivity {
                 playList.resetOrder();
                 shuffle = false;
                 shuffleButton.setImageDrawable(shuffleOffImage);
+                Log.d("DEBUG", "shuffle off");
             } else {
                 playList.shuffleOrder();
                 shuffle = true;
                 shuffleButton.setImageDrawable(shuffleOnImage);
+                Log.d("DEBUG", "shuffle on");
             }
         });
         repeatButton = findViewById(R.id.button_repeat);
@@ -128,24 +130,21 @@ public class MainActivity extends AppCompatActivity {
                 playList.setRepeat(false);
                 repeat = false;
                 repeatButton.setImageDrawable(repeatOffImage);
+                Log.d("DEBUG", "repeat off");
             } else {
                 playList.setRepeat(true);
                 repeat = true;
                 repeatButton.setImageDrawable(repeatOnImage);
+                Log.d("DEBUG", "repeat on");
             }
         });
         nextButton = findViewById(R.id.button_next);
-        nextButton.setOnClickListener(v -> {
-            Song nextSong = playList.next();
-            if (nextSong != null) {
-                play(nextSong);
-            }else{
-                resetPlayer();
-            }
-        });
+        nextButton.setOnClickListener(v -> next());
         pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
         pauseOrResumeButton.setOnClickListener(v -> {
-            if (player.isPlaying()) {
+            if (player.currentSong == null) {
+                first();
+            } else if (player.isPlaying()) {
                 player.pause();
                 pauseOrResumeButton.setImageDrawable(resumeImage);
                 Log.d("DEBUG", "pause");
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 playTimeTextView.setText(String.format(Locale.getDefault(), "%s/%s", formatTime(progress), formatTime(duration)));
                 if (fromUser) {
                     player.seekTo(progress);
-                    Log.d("DEBUG", "onProgressChanged fromUser to: " + progress);
+                    Log.d("DEBUG", "onProgressChanged fromUser to: " + progress + " / " + duration);
                 }
             }
 
@@ -270,18 +269,30 @@ public class MainActivity extends AppCompatActivity {
         songInfoTextView.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
         originalBPMTextView.setText(String.format(Locale.getDefault(), "Original BPM %.2f", song.BPM));
         pauseOrResumeButton.setImageDrawable(pauseImage);
-        player.setCompletionListener(mp -> {
-            Song nextSong = playList.next();
-            if (nextSong != null) {
-                play(nextSong);
-            }else{
-                resetPlayer();
-            }
-        });
+        player.setCompletionListener(mp -> next());
         if (shouldSyncBPM) {
             sync();
         }
         Log.d("DEBUG", "play song: " + song.title);
+    }
+
+    private void first() {
+        Song song = playList.first();
+        if (song != null) {
+            Log.d("DEBUG", "first song: " + song.title);
+            play(song);
+        }
+    }
+
+    private void next() {
+        Song nextSong = playList.next();
+        if (nextSong != null) {
+            play(nextSong);
+            Log.d("DEBUG", "next song: " + nextSong.title);
+        } else {
+            resetPlayer();
+            Log.d("DEBUG", "no next song");
+        }
     }
 
     private void resetPlayer() {
@@ -290,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
         originalBPMTextView.setText("");
         seekBar.setMax(0);
         playTimeTextView.setText("");
+        pauseOrResumeButton.setImageDrawable(resumeImage);
     }
 
     private void sync() {

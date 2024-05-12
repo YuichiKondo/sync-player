@@ -94,10 +94,23 @@ public class PlayList {
         return nextSong;
     }
 
+    public Song first() {
+        if (playbackOrder.isEmpty()) {
+            return null;
+        }
+        Song firstSong = playbackOrder.get(0);
+        currentSong = firstSong;
+        return firstSong;
+    }
+
     public void shuffleOrder() {
-        playbackOrder.remove(currentSong);
-        Collections.shuffle(playbackOrder);
-        playbackOrder.add(0, currentSong);
+        if (currentSong == null) {
+            Collections.shuffle(playbackOrder);
+        } else {
+            playbackOrder.remove(currentSong);
+            Collections.shuffle(playbackOrder);
+            playbackOrder.add(0, currentSong);
+        }
         refresh();
     }
 

@@ -189,7 +189,7 @@
                     android:background="@null"
                     android:contentDescription="@string/pause_or_resume"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/pause" />
+                    app:srcCompat="@drawable/resume" />
 
                 <ImageButton
                     android:id="@+id/button_next"

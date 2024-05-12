@@ -33,6 +33,7 @@ public class Player {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
+            currentSong = null;
         }
     }
 
