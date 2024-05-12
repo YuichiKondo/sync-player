@@ -29,6 +29,14 @@ public class Player {
         mediaPlayer.setPlaybackParams(playbackParams);
     }
 
+    public void release() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+            currentSong = null;
+        }
+    }
+
     public void setCompletionListener(MediaPlayer.OnCompletionListener listener) {
         if (mediaPlayer == null) {
             return;

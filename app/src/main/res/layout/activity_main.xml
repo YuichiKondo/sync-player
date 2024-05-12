@@ -126,8 +126,8 @@
                     android:id="@+id/text_view_song_info"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:textSize="16sp" />
 
@@ -135,8 +135,8 @@
                     android:id="@+id/text_view_original_bpm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -154,15 +154,67 @@
                 android:layout_height="30dp"
                 android:max="0" />
 
-            <ImageButton
-                android:id="@+id/button_pause_or_resume"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:background="@null"
-                android:contentDescription="@string/pause_or_resume"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/pause" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/button_shuffle"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@null"
+                    android:contentDescription="@string/shuffle"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/shuffle_off" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/button_previous"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@null"
+                    android:contentDescription="@string/previous"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/previous" />
+
+                <ImageButton
+                    android:id="@+id/button_pause_or_resume"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@null"
+                    android:contentDescription="@string/pause_or_resume"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/resume" />
+
+                <ImageButton
+                    android:id="@+id/button_next"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@null"
+                    android:contentDescription="@string/next"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/next" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/button_repeat"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@null"
+                    android:contentDescription="@string/repeat"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/repeat_off" />
+            </LinearLayout>
+
         </LinearLayout>
 
 

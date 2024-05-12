@@ -46,8 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private final long timeoutMillis = 2000;
     private boolean useManualBPM = false;
     private boolean shouldSyncBPM = false;
+    private boolean shuffle = false;
+    private boolean repeat = false;
     private final int averageN = 5;
     private final ArrayList<Long> stepDeltas = new ArrayList<>(averageN);
+    private Drawable shuffleOnImage;
+    private Drawable shuffleOffImage;
+    private Drawable repeatOnImage;
+    private Drawable repeatOffImage;
     private Drawable pauseImage;
     private Drawable resumeImage;
     private Player player;
@@ -60,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView playTimeTextView;
     private EditText manualBpmEditText;
     private SeekBar seekBar;
+    private ImageButton shuffleButton;
+    private ImageButton repeatButton;
     private ImageButton pauseOrResumeButton;
     private View mainView;
 
@@ -87,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
         prev_time = System.currentTimeMillis();
 
 //        ボタン画像
+        shuffleOnImage = AppCompatResources.getDrawable(this, R.drawable.shuffle_on);
+        shuffleOffImage = AppCompatResources.getDrawable(this, R.drawable.shuffle_off);
+        repeatOnImage = AppCompatResources.getDrawable(this, R.drawable.repeat_on);
+        repeatOffImage = AppCompatResources.getDrawable(this, R.drawable.repeat_off);
         pauseImage = AppCompatResources.getDrawable(this, R.drawable.pause);
         resumeImage = AppCompatResources.getDrawable(this, R.drawable.resume);
 
@@ -96,9 +108,52 @@ public class MainActivity extends AppCompatActivity {
         playList.add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
         playList.add(new Song(R.raw.letsplay, "Let's Play", "MADZI", 124));
         playList.add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 80));
+        songInfoTextView = findViewById(R.id.text_view_song_info);
+        originalBPMTextView = findViewById(R.id.text_view_original_bpm);
+        playTimeTextView = findViewById(R.id.text_view_play_time);
+        shuffleButton = findViewById(R.id.button_shuffle);
+        shuffleButton.setOnClickListener(v -> {
+            if (shuffle) {
+                playList.resetOrder();
+                shuffle = false;
+                shuffleButton.setImageDrawable(shuffleOffImage);
+                Log.d("DEBUG", "shuffle off");
+            } else {
+                playList.shuffleOrder();
+                shuffle = true;
+                shuffleButton.setImageDrawable(shuffleOnImage);
+                Log.d("DEBUG", "shuffle on");
+            }
+        });
+        repeatButton = findViewById(R.id.button_repeat);
+        repeatButton.setOnClickListener(v -> {
+            if (repeat) {
+                playList.setRepeat(false);
+                repeat = false;
+                repeatButton.setImageDrawable(repeatOffImage);
+                Log.d("DEBUG", "repeat off");
+            } else {
+                playList.setRepeat(true);
+                repeat = true;
+                repeatButton.setImageDrawable(repeatOnImage);
+                Log.d("DEBUG", "repeat on");
+            }
+        });
+        ImageButton nextButton = findViewById(R.id.button_next);
+        nextButton.setOnClickListener(v -> next());
+        ImageButton previousButton = findViewById(R.id.button_previous);
+        previousButton.setOnClickListener(v -> {
+            if (player.currentSong != null && player.getCurrentPosition() < 2000) {
+                previous();
+            } else {
+                player.seekTo(0);
+            }
+        });
         pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
         pauseOrResumeButton.setOnClickListener(v -> {
-            if (player.isPlaying()) {
+            if (player.currentSong == null) {
+                first();
+            } else if (player.isPlaying()) {
                 player.pause();
                 pauseOrResumeButton.setImageDrawable(resumeImage);
                 Log.d("DEBUG", "pause");
@@ -108,9 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DEBUG", "resume");
             }
         });
-        songInfoTextView = findViewById(R.id.text_view_song_info);
-        originalBPMTextView = findViewById(R.id.text_view_original_bpm);
-        playTimeTextView = findViewById(R.id.text_view_play_time);
         seekBar = findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -119,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 playTimeTextView.setText(String.format(Locale.getDefault(), "%s/%s", formatTime(progress), formatTime(duration)));
                 if (fromUser) {
                     player.seekTo(progress);
-                    Log.d("DEBUG", "onProgressChanged fromUser to: " + progress);
+                    Log.d("DEBUG", "onProgressChanged fromUser to: " + progress + " / " + duration);
                 }
             }
 
@@ -223,16 +275,50 @@ public class MainActivity extends AppCompatActivity {
         songInfoTextView.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
         originalBPMTextView.setText(String.format(Locale.getDefault(), "Original BPM %.2f", song.BPM));
         pauseOrResumeButton.setImageDrawable(pauseImage);
-        player.setCompletionListener(mp -> {
-            Song nextSong = playList.next();
-            if (nextSong != null) {
-                play(nextSong);
-            }
-        });
+        player.setCompletionListener(mp -> next());
         if (shouldSyncBPM) {
             sync();
         }
         Log.d("DEBUG", "play song: " + song.title);
+    }
+
+    private void first() {
+        Song song = playList.first();
+        if (song != null) {
+            Log.d("DEBUG", "first song: " + song.title);
+            play(song);
+        }
+    }
+
+    private void next() {
+        Song nextSong = playList.next();
+        if (nextSong != null) {
+            play(nextSong);
+            Log.d("DEBUG", "next song: " + nextSong.title);
+        } else {
+            resetPlayer();
+            Log.d("DEBUG", "no next song");
+        }
+    }
+
+    private void previous() {
+        Song previousSong = playList.previous();
+        if (previousSong != null) {
+            play(previousSong);
+            Log.d("DEBUG", "previous song: " + previousSong.title);
+        } else {
+            resetPlayer();
+            Log.d("DEBUG", "no previous song");
+        }
+    }
+
+    private void resetPlayer() {
+        player.release();
+        songInfoTextView.setText("");
+        originalBPMTextView.setText("");
+        seekBar.setMax(0);
+        playTimeTextView.setText("");
+        pauseOrResumeButton.setImageDrawable(resumeImage);
     }
 
     private void sync() {
