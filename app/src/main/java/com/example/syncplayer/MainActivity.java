@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
         playList.add(new Song(R.raw.get_up, "GET UP", "TOKYO MACHINE & Guy Arthur", 128));
         playList.add(new Song(R.raw.lost_my_love, "Lost My Love", "Tatsunoshin", 165));
         playList.add(new Song(R.raw.the_time, "The Time", "Tatsunoshin", 150));
-        playList.add(new Song(R.raw.summers_end, "Summer's End (feat. Meredith Bull)", "Tatsunoshin & Jade Key", 153));
         playList.add(new Song(R.raw.light_me_up, "Light Me Up (feat. Giin)", "Tatsunoshin", 160));
+        playList.add(new Song(R.raw.summers_end, "Summer's End (feat. Meredith Bull)", "Tatsunoshin & Jade Key", 153));
         playList.add(new Song(R.raw.take_me_away, "Take Me Away", "NATSUMI", 150));
         songInfoTextView = findViewById(R.id.text_view_song_info);
         originalBPMTextView = findViewById(R.id.text_view_original_bpm);
