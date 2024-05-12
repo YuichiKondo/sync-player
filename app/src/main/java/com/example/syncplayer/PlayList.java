@@ -25,6 +25,7 @@ public class PlayList {
     private final List<Song> playbackOrder = new LinkedList<>();
     private final List<Song> defaultOrder = new ArrayList<>();
     private Song currentSong;
+    private boolean shuffle = false;
     private boolean repeat = false;
 
     public PlayList(Context context, LinearLayout playListLinearLayout, Consumer<Song> callback) {
@@ -88,6 +89,10 @@ public class PlayList {
                 setCurrentSong(null);
                 return null;
             } else {
+                if (shuffle) {
+                    setCurrentSong(null);
+                    shuffleOrder();
+                }
                 nextSongIndex = 0;
             }
         } else {
@@ -108,6 +113,7 @@ public class PlayList {
     }
 
     public void shuffleOrder() {
+        shuffle = true;
         if (currentSong == null) {
             Collections.shuffle(playbackOrder);
         } else {
@@ -119,6 +125,7 @@ public class PlayList {
     }
 
     public void resetOrder() {
+        shuffle = false;
         playbackOrder.clear();
         playbackOrder.addAll(defaultOrder);
         refresh();
