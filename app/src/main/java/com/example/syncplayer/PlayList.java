@@ -57,6 +57,7 @@ public class PlayList {
         int previousSongIndex;
         if (currentSongIndex == 0) {
             if (!repeat) {
+                currentSong = null;
                 return null;
             }
             previousSongIndex = playbackOrder.size() - 1;
@@ -80,6 +81,7 @@ public class PlayList {
         int nextSongIndex;
         if (currentSongIndex == playbackOrder.size() - 1) {
             if (!repeat) {
+                currentSong = null;
                 return null;
             } else {
                 nextSongIndex = 0;

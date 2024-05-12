@@ -134,6 +134,15 @@ public class MainActivity extends AppCompatActivity {
                 repeatButton.setImageDrawable(repeatOnImage);
             }
         });
+        nextButton = findViewById(R.id.button_next);
+        nextButton.setOnClickListener(v -> {
+            Song nextSong = playList.next();
+            if (nextSong != null) {
+                play(nextSong);
+            }else{
+                resetPlayer();
+            }
+        });
         pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
         pauseOrResumeButton.setOnClickListener(v -> {
             if (player.isPlaying()) {
@@ -263,20 +272,24 @@ public class MainActivity extends AppCompatActivity {
         pauseOrResumeButton.setImageDrawable(pauseImage);
         player.setCompletionListener(mp -> {
             Song nextSong = playList.next();
-            if (nextSong == null) {
-                player.release();
-                songInfoTextView.setText("");
-                originalBPMTextView.setText("");
-                playTimeTextView.setText("");
-                seekBar.setMax(0);
-            }else{
+            if (nextSong != null) {
                 play(nextSong);
+            }else{
+                resetPlayer();
             }
         });
         if (shouldSyncBPM) {
             sync();
         }
         Log.d("DEBUG", "play song: " + song.title);
+    }
+
+    private void resetPlayer() {
+        player.release();
+        songInfoTextView.setText("");
+        originalBPMTextView.setText("");
+        seekBar.setMax(0);
+        playTimeTextView.setText("");
     }
 
     private void sync() {
