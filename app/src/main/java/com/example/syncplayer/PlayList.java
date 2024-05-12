@@ -1,6 +1,7 @@
 package com.example.syncplayer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public class PlayList {
+    private final int normalFontSize = 16;
     private final Context context;
     private final LinearLayout playListLinearLayout;
     private final Consumer<Song> callback;
@@ -35,14 +37,15 @@ public class PlayList {
         playbackOrder.add(song);
         defaultOrder.add(song);
         Button button = new Button(context);
+        button.setBackgroundColor(Color.TRANSPARENT);
         button.setText(String.format(Locale.getDefault(), "%s - %s", song.artist, song.title));
         button.setAllCaps(false);
-        button.setTextSize(16);
+        button.setTextSize(normalFontSize);
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, 5);
         button.setLayoutParams(params);
         button.setOnClickListener(v -> {
-            currentSong = song;
+            setCurrentSong(song);
             callback.accept(song);
         });
         buttons.put(song, button);
@@ -57,7 +60,7 @@ public class PlayList {
         int previousSongIndex;
         if (currentSongIndex == 0) {
             if (!repeat) {
-                currentSong = null;
+                setCurrentSong(null);
                 return null;
             }
             previousSongIndex = playbackOrder.size() - 1;
@@ -65,10 +68,11 @@ public class PlayList {
             previousSongIndex = currentSongIndex - 1;
         }
         Song previousSong = playbackOrder.get(previousSongIndex);
-        currentSong = previousSong;
+        setCurrentSong(previousSong);
         return previousSong;
     }
 
+    @SuppressWarnings("unused")
     public @Nullable Song current() {
         return currentSong;
     }
@@ -81,7 +85,7 @@ public class PlayList {
         int nextSongIndex;
         if (currentSongIndex == playbackOrder.size() - 1) {
             if (!repeat) {
-                currentSong = null;
+                setCurrentSong(null);
                 return null;
             } else {
                 nextSongIndex = 0;
@@ -90,7 +94,7 @@ public class PlayList {
             nextSongIndex = currentSongIndex + 1;
         }
         Song nextSong = playbackOrder.get(nextSongIndex);
-        currentSong = nextSong;
+        setCurrentSong(nextSong);
         return nextSong;
     }
 
@@ -99,7 +103,7 @@ public class PlayList {
             return null;
         }
         Song firstSong = playbackOrder.get(0);
-        currentSong = firstSong;
+        setCurrentSong(firstSong);
         return firstSong;
     }
 
@@ -122,6 +126,21 @@ public class PlayList {
 
     public void setRepeat(boolean repeat) {
         this.repeat = repeat;
+    }
+
+    private void setCurrentSong(Song song) {
+        final int highlightedFontSize = 20;
+        if (currentSong != null) {
+            Button button = buttons.get(currentSong);
+            assert button != null;
+            button.setTextSize(normalFontSize);
+        }
+        if (song != null) {
+            Button button = buttons.get(song);
+            assert button != null;
+            button.setTextSize(highlightedFontSize);
+        }
+        currentSong = song;
     }
 
     private void refresh() {
