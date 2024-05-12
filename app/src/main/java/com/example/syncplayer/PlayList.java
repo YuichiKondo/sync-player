@@ -136,7 +136,7 @@ public class PlayList {
     }
 
     private void setCurrentSong(Song song) {
-        final int highlightedFontSize = 20;
+        final int highlightedFontSize = 24;
         if (currentSong != null) {
             Button button = buttons.get(currentSong);
             assert button != null;
