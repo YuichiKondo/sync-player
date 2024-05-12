@@ -10,4 +10,8 @@
     <string name="to_settings">設定へ</string>
     <string name="pause_or_resume">Pause or Resume</string>
     <string name="play_list">Play List</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="repeat">Repeat</string>
 </resources>
