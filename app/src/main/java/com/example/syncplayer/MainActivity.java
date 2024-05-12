@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private ImageButton shuffleButton;
     private ImageButton repeatButton;
-    private ImageButton previousButton;
-    private ImageButton nextButton;
     private ImageButton pauseOrResumeButton;
     private View mainView;
 
@@ -110,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         playList.add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
         playList.add(new Song(R.raw.letsplay, "Let's Play", "MADZI", 124));
         playList.add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 80));
+        songInfoTextView = findViewById(R.id.text_view_song_info);
+        originalBPMTextView = findViewById(R.id.text_view_original_bpm);
+        playTimeTextView = findViewById(R.id.text_view_play_time);
         shuffleButton = findViewById(R.id.button_shuffle);
         shuffleButton.setOnClickListener(v -> {
             if (shuffle) {
@@ -138,8 +139,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DEBUG", "repeat on");
             }
         });
-        nextButton = findViewById(R.id.button_next);
+        ImageButton nextButton = findViewById(R.id.button_next);
         nextButton.setOnClickListener(v -> next());
+        ImageButton previousButton = findViewById(R.id.button_previous);
+        previousButton.setOnClickListener(v -> {
+            if (player.currentSong != null && player.getCurrentPosition() < 2000) {
+                previous();
+            } else {
+                player.seekTo(0);
+            }
+        });
         pauseOrResumeButton = findViewById(R.id.button_pause_or_resume);
         pauseOrResumeButton.setOnClickListener(v -> {
             if (player.currentSong == null) {
@@ -154,9 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DEBUG", "resume");
             }
         });
-        songInfoTextView = findViewById(R.id.text_view_song_info);
-        originalBPMTextView = findViewById(R.id.text_view_original_bpm);
-        playTimeTextView = findViewById(R.id.text_view_play_time);
         seekBar = findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -292,6 +298,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             resetPlayer();
             Log.d("DEBUG", "no next song");
+        }
+    }
+
+    private void previous() {
+        Song previousSong = playList.previous();
+        if (previousSong != null) {
+            play(previousSong);
+            Log.d("DEBUG", "previous song: " + previousSong.title);
+        } else {
+            resetPlayer();
+            Log.d("DEBUG", "no previous song");
         }
     }
 
