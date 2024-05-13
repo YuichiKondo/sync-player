@@ -11,6 +11,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -83,12 +84,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        権限チェック
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
-            Log.d("DEBUG", "ACTIVITY_RECOGNITION granted");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
+                Log.d("DEBUG", "ACTIVITY_RECOGNITION granted");
+                setupDetectingBPM();
+            } else {
+                Log.d("DEBUG", "ACTIVITY_RECOGNITION not granted");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 1);
+            }
+        }else{
+            Log.d("DEBUG", "ACTIVITY_RECOGNITION not required");
             setupDetectingBPM();
-        } else {
-            Log.d("DEBUG", "ACTIVITY_RECOGNITION not granted");
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, 1);
         }
 
 //        初期値設定
@@ -271,7 +277,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 //        擬似バックグラウンド実行
-//        noinspection deprecation
         requestVisibleBehind(true);
     }
 
