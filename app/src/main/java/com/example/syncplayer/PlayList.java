@@ -14,13 +14,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 public class PlayList {
+    @FunctionalInterface
+    public interface IOnClickListener {
+        void onClick(Song song);
+    }
+
     private final int normalFontSize = 16;
     private final Context context;
     private final LinearLayout playListLinearLayout;
-    private final Consumer<Song> callback;
+    private final IOnClickListener onClickListener;
     private final HashMap<Song, Button> buttons = new HashMap<>();
     private final List<Song> playbackOrder = new LinkedList<>();
     private final List<Song> defaultOrder = new ArrayList<>();
@@ -28,10 +32,10 @@ public class PlayList {
     private boolean shuffle = false;
     private boolean repeat = false;
 
-    public PlayList(Context context, LinearLayout playListLinearLayout, Consumer<Song> callback) {
+    public PlayList(Context context, LinearLayout playListLinearLayout, IOnClickListener onClickListener) {
         this.context = context;
         this.playListLinearLayout = playListLinearLayout;
-        this.callback = callback;
+        this.onClickListener = onClickListener;
     }
 
     public void add(Song song) {
@@ -47,7 +51,7 @@ public class PlayList {
         button.setLayoutParams(params);
         button.setOnClickListener(v -> {
             setCurrentSong(song);
-            callback.accept(song);
+            onClickListener.onClick(song);
         });
         buttons.put(song, button);
         playListLinearLayout.addView(button);

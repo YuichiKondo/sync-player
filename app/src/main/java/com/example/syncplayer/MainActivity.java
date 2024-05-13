@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DEBUG", "ACTIVITY_RECOGNITION not granted");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 1);
             }
-        }else{
+        } else {
             Log.d("DEBUG", "ACTIVITY_RECOGNITION not required");
             setupDetectingBPM();
         }
@@ -374,14 +374,19 @@ public class MainActivity extends AppCompatActivity {
                 if (stepDeltas.size() > averageN) {
                     stepDeltas.remove(0);
                 }
-                stepDeltas.stream().mapToLong(Long::longValue).average().ifPresent(averageDelta -> {
-                    detectedBPM = 60000 / (float) averageDelta;
+                if (!stepDeltas.isEmpty()) {
+                    long sumDelta = 0;
+                    for (Long stepDelta : stepDeltas) {
+                        sumDelta += stepDelta;
+                    }
+                    float averageDelta = (float) sumDelta / stepDeltas.size();
+                    detectedBPM = 60000 / averageDelta;
                     detectedBPMTextView.setText(String.format(Locale.getDefault(), "%.2f", detectedBPM));
                     if (shouldSyncBPM) {
                         sync();
                     }
                     Log.d("DEBUG", "detectedBPM: " + detectedBPM + ", averageDelta: " + averageDelta + ", stepDeltas: " + stepDeltas);
-                });
+                }
                 prev_time = curr_time;
                 timeoutHandler.postDelayed(timeout, timeoutMillis);
             }
