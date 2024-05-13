@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         playList = new PlayList(this, findViewById(R.id.linear_layout_play_list), this::play);
         playList.add(new Song(R.raw.vibe, "Vibe", "Spicyverse", 143));
         playList.add(new Song(R.raw.lets_play, "Let's Play", "MADZI", 124));
-        playList.add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 80));
+        playList.add(new Song(R.raw.paradise, "Paradise", "N3WPORT x Britt Lari", 160));
         playList.add(new Song(R.raw.slash, "SLASH", "Tokyo Machine", 128));
         playList.add(new Song(R.raw.get_up, "GET UP", "TOKYO MACHINE & Guy Arthur", 128));
         playList.add(new Song(R.raw.lost_my_love, "Lost My Love", "Tatsunoshin", 165));
